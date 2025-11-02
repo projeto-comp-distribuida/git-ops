@@ -37,6 +37,16 @@ spec:
             - name: http
               containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
+          {{- if .Values.probe.startup.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.probe.startup.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.probe.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probe.startup.periodSeconds }}
+            timeoutSeconds: {{ .Values.probe.startup.timeoutSeconds }}
+            failureThreshold: {{ .Values.probe.startup.failureThreshold }}
+          {{- end }}
           {{- if .Values.probe.liveness.enabled }}
           livenessProbe:
             httpGet:
@@ -44,6 +54,8 @@ spec:
               port: http
             initialDelaySeconds: {{ .Values.probe.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probe.liveness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probe.liveness.failureThreshold }}
           {{- end }}
           {{- if .Values.probe.readiness.enabled }}
           readinessProbe:
@@ -52,6 +64,8 @@ spec:
               port: http
             initialDelaySeconds: {{ .Values.probe.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probe.readiness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probe.readiness.failureThreshold }}
           {{- end }}
           env:
             {{- range .Values.env }}
