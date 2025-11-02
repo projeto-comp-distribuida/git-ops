@@ -71,7 +71,11 @@ env:
 
 secrets:
   enabled: false
-  secretName: "gestao-de-professores-dev-secrets"
+  secretName: ""
+  # Secret 'gestao-de-professores-dev-secrets' must be created externally in namespace 'gestao-de-professores-dev'
+  # Use: ./scripts/create-secrets.sh gestao-de-professores gestao-de-professores-dev
+  # Comment out secretName above when secret doesn't exist to prevent pod failures
+  # NOTE: If getting "Authentication timed out" errors, verify database credentials in the secret
 
 sealedSecrets:
   enabled: false
