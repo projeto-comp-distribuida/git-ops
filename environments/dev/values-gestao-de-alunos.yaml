@@ -22,6 +22,10 @@ env:
     value: "DEBUG"
   - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
     value: "org.postgresql.Driver"
+  - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+    value: "none"
+  - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+    value: "org.hibernate.dialect.PostgreSQLDialect"
   - name: SPRING_REDIS_HOST
     value: "redis.infrastructure-dev"
   - name: SPRING_REDIS_PORT
