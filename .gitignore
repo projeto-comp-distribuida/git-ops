@@ -25,4 +25,5 @@ Thumbs.db
 # Binaries
 kubeseal
 kubeseal-*.tar.gz
-
+.config
+config
