@@ -39,9 +39,14 @@ spec:
               protocol: TCP
           {{- if .Values.probe.startup.enabled }}
           startupProbe:
+            {{- if .Values.probe.startup.useTcpSocket }}
+            tcpSocket:
+              port: http
+            {{- else }}
             httpGet:
               path: {{ .Values.probe.startup.path }}
               port: http
+            {{- end }}
             initialDelaySeconds: {{ .Values.probe.startup.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.startup.periodSeconds }}
             timeoutSeconds: {{ .Values.probe.startup.timeoutSeconds }}
