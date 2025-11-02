@@ -54,9 +54,14 @@ spec:
           {{- end }}
           {{- if .Values.probe.liveness.enabled }}
           livenessProbe:
+            {{- if .Values.probe.liveness.useTcpSocket }}
+            tcpSocket:
+              port: http
+            {{- else }}
             httpGet:
               path: {{ .Values.probe.liveness.path }}
               port: http
+            {{- end }}
             initialDelaySeconds: {{ .Values.probe.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.liveness.periodSeconds }}
             timeoutSeconds: {{ .Values.probe.liveness.timeoutSeconds }}
@@ -64,9 +69,14 @@ spec:
           {{- end }}
           {{- if .Values.probe.readiness.enabled }}
           readinessProbe:
+            {{- if .Values.probe.readiness.useTcpSocket }}
+            tcpSocket:
+              port: http
+            {{- else }}
             httpGet:
               path: {{ .Values.probe.readiness.path }}
               port: http
+            {{- end }}
             initialDelaySeconds: {{ .Values.probe.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.readiness.periodSeconds }}
             timeoutSeconds: {{ .Values.probe.readiness.timeoutSeconds }}

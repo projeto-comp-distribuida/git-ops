@@ -22,6 +22,10 @@ env:
     value: "DEBUG"
   - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
     value: "org.postgresql.Driver"
+  - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+    value: "none"
+  - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+    value: "org.hibernate.dialect.PostgreSQLDialect"
   - name: SPRING_REDIS_HOST
     value: "redis.infrastructure-dev"
   - name: SPRING_REDIS_PORT
@@ -95,14 +99,16 @@ probe:
     failureThreshold: 60  # Total: 60 + (60 * 10) = 660 seconds = 11 minutes max startup time
   liveness:
     enabled: true
-    path: /api/v1/teachers/health
+    useTcpSocket: true  # Use TCP socket instead of HTTP - avoids auth issues
+    path: /api/v1/teachers/health  # Only used if useTcpSocket is false
     initialDelaySeconds: 120
     periodSeconds: 30
     timeoutSeconds: 5
     failureThreshold: 3
   readiness:
     enabled: true
-    path: /api/v1/teachers/health
+    useTcpSocket: true  # Use TCP socket instead of HTTP - avoids auth issues
+    path: /api/v1/teachers/health  # Only used if useTcpSocket is false
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5

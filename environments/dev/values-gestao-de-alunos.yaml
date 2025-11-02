@@ -97,14 +97,16 @@ probe:
     failureThreshold: 60  # Total: 60 + (60 * 10) = 660 seconds = 11 minutes max startup time
   liveness:
     enabled: true
-    path: /api/v1/students/health
+    useTcpSocket: true  # Use TCP socket instead of HTTP - avoids auth issues
+    path: /api/v1/students/health  # Only used if useTcpSocket is false
     initialDelaySeconds: 120
     periodSeconds: 30
     timeoutSeconds: 5
     failureThreshold: 3
   readiness:
     enabled: true
-    path: /api/v1/students/health
+    useTcpSocket: true  # Use TCP socket instead of HTTP - avoids auth issues
+    path: /api/v1/students/health  # Only used if useTcpSocket is false
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
