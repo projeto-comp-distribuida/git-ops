@@ -43,6 +43,18 @@ spec:
               value: "{{ .Values.zookeeper.serviceName }}:{{ .Values.zookeeper.servicePort }}"
             - name: KAFKA_ADVERTISED_LISTENERS
               value: "PLAINTEXT://{{ .Values.kafka.serviceName }}:{{ .Values.kafka.internalPort }},PLAINTEXT_HOST://localhost:{{ .Values.service.externalPort }}"
+          {{- if .Values.probe.startup.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - kafka-broker-api-versions
+                - --bootstrap-server
+                - localhost:{{ .Values.service.internalPort }}
+            initialDelaySeconds: {{ .Values.probe.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probe.startup.periodSeconds }}
+            timeoutSeconds: {{ .Values.probe.startup.timeoutSeconds }}
+            failureThreshold: {{ .Values.probe.startup.failureThreshold }}
+          {{- end }}
           {{- if .Values.probe.liveness.enabled }}
           livenessProbe:
             exec:

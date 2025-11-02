@@ -56,6 +56,12 @@ tolerations: []
 affinity: {}
 
 probe:
+  startup:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 30
   liveness:
     enabled: true
     initialDelaySeconds: 30

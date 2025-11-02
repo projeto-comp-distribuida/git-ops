@@ -77,14 +77,25 @@ secrets: []
   #   key: database-password
 
 probe:
+  startup:
+    enabled: true
+    path: /actuator/health
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 30
   liveness:
     enabled: true
     path: /actuator/health
     initialDelaySeconds: 60
     periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
   readiness:
     enabled: true
     path: /actuator/health
     initialDelaySeconds: 30
     periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
 
