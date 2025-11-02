@@ -72,25 +72,10 @@ secrets:
 
 probe:
   startup:
-    enabled: true
-    path: /actuator/health
-    initialDelaySeconds: 150
-    periodSeconds: 20
-    timeoutSeconds: 10
-    failureThreshold: 50
+    enabled: false
   liveness:
-    enabled: true
-    path: /actuator/health
-    initialDelaySeconds: 300
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 3
+    enabled: false
   readiness:
-    enabled: true
-    path: /actuator/health
-    initialDelaySeconds: 180
-    periodSeconds: 5
-    timeoutSeconds: 5
-    failureThreshold: 3
+    enabled: false
 
 
