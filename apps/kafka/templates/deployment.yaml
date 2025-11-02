@@ -35,16 +35,18 @@ spec:
               containerPort: {{ .Values.service.externalPort }}
               protocol: TCP
           env:
-            {{- range $key, $value := .Values.env }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
-            {{- end }}
-            - name: KAFKA_ZOOKEEPER_CONNECT
-              value: "{{ .Values.zookeeper.serviceName }}:{{ .Values.zookeeper.servicePort }}"
             - name: KAFKA_LISTENERS
               value: "PLAINTEXT://0.0.0.0:{{ .Values.service.internalPort }},PLAINTEXT_HOST://0.0.0.0:{{ .Values.service.externalPort }}"
             - name: KAFKA_ADVERTISED_LISTENERS
               value: "PLAINTEXT://{{ .Values.kafka.serviceName }}:{{ .Values.kafka.internalPort }},PLAINTEXT_HOST://localhost:{{ .Values.service.externalPort }}"
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: "{{ .Values.zookeeper.serviceName }}:{{ .Values.zookeeper.servicePort }}"
+            {{- range $key, $value := .Values.env }}
+            {{- if and (ne $key "KAFKA_ZOOKEEPER_CONNECT") (ne $key "KAFKA_ADVERTISED_LISTENERS") (ne $key "KAFKA_LISTENERS") }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
           {{- if .Values.probe.startup.enabled }}
           startupProbe:
             exec:
