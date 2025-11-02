@@ -27,3 +27,4 @@ kubeseal
 kubeseal-*.tar.gz
 .config
 config
+/scripts

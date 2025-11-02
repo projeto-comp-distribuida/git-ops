@@ -65,6 +65,16 @@ spec:
                   name: {{ .secretName }}
                   key: {{ .key }}
             {{- end }}
+            {{- if .Values.sealedSecrets.enabled }}
+            {{- $secretName := .Values.sealedSecrets.secretName | default (printf "%s-secrets" (include "gestao-de-professores.fullname" .)) }}
+            {{- range $key, $value := .Values.sealedSecrets.data }}
+            - name: {{ $key | upper | replace "-" "_" }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ $key }}
+            {{- end }}
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
