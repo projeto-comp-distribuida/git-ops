@@ -21,10 +21,11 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+scripts/.env
 
 # Binaries
 kubeseal
 kubeseal-*.tar.gz
 .config
 config
-/scripts
+# Note: /scripts was removed - we want to commit scripts, just not .env files

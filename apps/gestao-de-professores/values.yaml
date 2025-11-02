@@ -61,7 +61,11 @@ env: []
   # - name: DATABASE_URL
   #   value: "postgresql://user:pass@host:5432/dbname"
 
-secrets: []
+secrets:
+  enabled: false
+  secretName: ""
+  data: {}
+  # Or use array format for referencing external secrets:
   # - name: DATABASE_PASSWORD
   #   secretName: gestao-de-professores-secrets
   #   key: database-password

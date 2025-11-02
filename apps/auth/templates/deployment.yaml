@@ -58,12 +58,63 @@ spec:
             - name: {{ .name }}
               value: {{ .value | quote }}
             {{- end }}
+            {{- if kindIs "slice" .Values.secrets }}
             {{- range .Values.secrets }}
             - name: {{ .name }}
               valueFrom:
                 secretKeyRef:
                   name: {{ .secretName }}
                   key: {{ .key }}
+            {{- end }}
+            {{- end }}
+            {{- if and (not (kindIs "slice" .Values.secrets)) .Values.secrets.secretName }}
+            {{- $secretName := .Values.secrets.secretName | default (printf "%s-secrets" (include "auth.fullname" .)) }}
+            {{- if .Values.secrets.enabled }}
+            {{- range $key, $value := .Values.secrets.data }}
+            - name: {{ $key | upper | replace "-" "_" }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ $key }}
+            {{- end }}
+            {{- else }}
+            {{- /* Secrets created externally - reference all expected keys */}}
+            - name: AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: auth0-domain
+            - name: AUTH0_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: auth0-client-id
+            - name: AUTH0_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: auth0-client-secret
+            - name: AUTH0_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: auth0-audience
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: spring-datasource-url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: spring-datasource-username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: spring-datasource-password
+            {{- end }}
             {{- end }}
             {{- if .Values.sealedSecrets.enabled }}
             {{- $secretName := .Values.sealedSecrets.secretName | default (printf "%s-secrets" (include "auth.fullname" .)) }}
