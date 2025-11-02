@@ -16,3 +16,4 @@ Common annotations
 argocd.argoproj.io/sync-wave: "0"
 {{- end }}
 
+
