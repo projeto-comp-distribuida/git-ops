@@ -53,7 +53,7 @@ spec:
               command:
                 - kafka-broker-api-versions
                 - --bootstrap-server
-                - localhost:{{ .Values.service.internalPort }}
+                - localhost:{{ .Values.service.externalPort }}
             initialDelaySeconds: {{ .Values.probe.startup.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.startup.periodSeconds }}
             timeoutSeconds: {{ .Values.probe.startup.timeoutSeconds }}
@@ -65,7 +65,7 @@ spec:
               command:
                 - kafka-broker-api-versions
                 - --bootstrap-server
-                - localhost:{{ .Values.service.internalPort }}
+                - localhost:{{ .Values.service.externalPort }}
             initialDelaySeconds: {{ .Values.probe.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.liveness.periodSeconds }}
             timeoutSeconds: {{ .Values.probe.liveness.timeoutSeconds }}
@@ -77,7 +77,7 @@ spec:
               command:
                 - kafka-broker-api-versions
                 - --bootstrap-server
-                - localhost:{{ .Values.service.internalPort }}
+                - localhost:{{ .Values.service.externalPort }}
             initialDelaySeconds: {{ .Values.probe.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.readiness.periodSeconds }}
             timeoutSeconds: {{ .Values.probe.readiness.timeoutSeconds }}
