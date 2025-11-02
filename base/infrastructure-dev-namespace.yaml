@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: infrastructure-dev
+  labels:
+    name: infrastructure-dev
+    environment: dev
+
