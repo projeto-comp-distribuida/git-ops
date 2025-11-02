@@ -95,11 +95,12 @@ ingress:
 probe:
   startup:
     enabled: true
-    path: /api/v1/auth/health
+    useTcpSocket: true  # Use TCP socket instead of HTTP - faster and checks if port is open
+    path: /api/v1/auth/health  # Only used if useTcpSocket is false
     initialDelaySeconds: 60
-    periodSeconds: 15
-    timeoutSeconds: 10
-    failureThreshold: 60  # Total: 60 + (60 * 15) = 960 seconds = 16 minutes max startup time
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 60  # Total: 60 + (60 * 10) = 660 seconds = 11 minutes max startup time
   liveness:
     enabled: true
     path: /api/v1/auth/health
