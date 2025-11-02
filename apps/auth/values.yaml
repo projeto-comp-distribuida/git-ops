@@ -81,21 +81,21 @@ probe:
   startup:
     enabled: true
     path: /actuator/health
-    initialDelaySeconds: 90
-    periodSeconds: 15
-    timeoutSeconds: 5
-    failureThreshold: 40
+    initialDelaySeconds: 150
+    periodSeconds: 20
+    timeoutSeconds: 10
+    failureThreshold: 50
   liveness:
     enabled: true
     path: /actuator/health
-    initialDelaySeconds: 180
+    initialDelaySeconds: 300
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
   readiness:
     enabled: true
     path: /actuator/health
-    initialDelaySeconds: 120
+    initialDelaySeconds: 180
     periodSeconds: 5
     timeoutSeconds: 5
     failureThreshold: 3
