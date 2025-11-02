@@ -31,43 +31,62 @@ env:
     value: "http://gestao-de-alunos-dev.gestao-de-alunos-dev:80"
   - name: TEACHER_SERVICE_URI
     value: "http://gestao-de-professores-dev.gestao-de-professores-dev:80"
-  # Route Configuration
+  # Route Configuration (matching docker-compose exactly - no path rewriting, backend receives full path)
   # Auth Service Route
   - name: SPRING_CLOUD_GATEWAY_ROUTES_0_ID
-    value: "auth-route"
+    value: "auth-service"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_0_URI
     value: "http://auth-dev.auth-dev:80"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0
-    value: "Path=/api/auth/**"
+    value: "Path=/api/v1/auth/**"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0
-    value: "StripPrefix=2"
-  # Student Service Route
+    value: "RemoveRequestHeader=Origin"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_1
+    value: "RemoveRequestHeader=Referer"
+  # Users Service Route (also routes to auth service)
   - name: SPRING_CLOUD_GATEWAY_ROUTES_1_ID
-    value: "student-route"
+    value: "users-service"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_1_URI
-    value: "http://gestao-de-alunos-dev.gestao-de-alunos-dev:80"
+    value: "http://auth-dev.auth-dev:80"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0
-    value: "Path=/api/students/**"
+    value: "Path=/api/v1/users/**"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_0
-    value: "StripPrefix=2"
-  # Teacher Service Route
+    value: "RemoveRequestHeader=Origin"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_1
+    value: "RemoveRequestHeader=Referer"
+  # Student Service Route
   - name: SPRING_CLOUD_GATEWAY_ROUTES_2_ID
-    value: "teacher-route"
+    value: "student-service"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_2_URI
-    value: "http://gestao-de-professores-dev.gestao-de-professores-dev:80"
+    value: "http://gestao-de-alunos-dev.gestao-de-alunos-dev:80"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0
-    value: "Path=/api/teachers/**"
+    value: "Path=/api/v1/students/**"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_2_FILTERS_0
-    value: "StripPrefix=2"
-  # CORS Configuration
-  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS_0_ALLOWED_ORIGINS
+    value: "RemoveRequestHeader=Origin"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_2_FILTERS_1
+    value: "RemoveRequestHeader=Referer"
+  # Teacher Service Route
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_3_ID
+    value: "teacher-service"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_3_URI
+    value: "http://gestao-de-professores-dev.gestao-de-professores-dev:80"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0
+    value: "Path=/api/v1/teachers/**"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_3_FILTERS_0
+    value: "RemoveRequestHeader=Origin"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_3_FILTERS_1
+    value: "RemoveRequestHeader=Referer"
+  # CORS Configuration (using docker-compose format with ____ for nested properties)
+  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_ORIGINS
     value: "*"
-  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS_0_ALLOWED_METHODS
-    value: "GET,POST,PUT,DELETE,OPTIONS"
-  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS_0_ALLOWED_HEADERS
+  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_METHODS
+    value: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
+  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_HEADERS
     value: "*"
-  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS_0_ALLOW_CREDENTIALS
-    value: "false"
+  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOW_CREDENTIALS
+    value: "true"
+  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____MAX_AGE
+    value: "3600"
 
 ingress:
   enabled: true
