@@ -33,11 +33,8 @@ ingress:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
   hosts:
-    # Use your actual domain or IP-based access
-    # For public access, you can use:
-    # - A specific domain (e.g., kafka-ui.yourdomain.com)
-    # - Or configure via ingress controller's default backend
-    - host: kafka-ui.dev.local  # Update this to your actual domain or use "*" for IP-based access
+    # Empty host allows access from any domain/IP (internet accessible)
+    - host: ""
       paths:
         - path: /
           pathType: Prefix
