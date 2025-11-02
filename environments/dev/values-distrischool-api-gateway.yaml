@@ -31,6 +31,34 @@ env:
     value: "http://gestao-de-alunos-dev.gestao-de-alunos-dev:80"
   - name: TEACHER_SERVICE_URI
     value: "http://gestao-de-professores-dev.gestao-de-professores-dev:80"
+  # Route Configuration
+  # Auth Service Route
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_0_ID
+    value: "auth-route"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_0_URI
+    value: "http://auth-dev.auth-dev:80"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0
+    value: "Path=/api/auth/**"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0
+    value: "StripPrefix=2"
+  # Student Service Route
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_1_ID
+    value: "student-route"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_1_URI
+    value: "http://gestao-de-alunos-dev.gestao-de-alunos-dev:80"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0
+    value: "Path=/api/students/**"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_0
+    value: "StripPrefix=2"
+  # Teacher Service Route
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_2_ID
+    value: "teacher-route"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_2_URI
+    value: "http://gestao-de-professores-dev.gestao-de-professores-dev:80"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0
+    value: "Path=/api/teachers/**"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_2_FILTERS_0
+    value: "StripPrefix=2"
   # CORS Configuration
   - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS_0_ALLOWED_ORIGINS
     value: "*"
