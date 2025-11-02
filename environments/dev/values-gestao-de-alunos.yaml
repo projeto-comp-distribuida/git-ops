@@ -67,7 +67,10 @@ env:
 
 secrets:
   enabled: false
-  secretName: "gestao-de-alunos-dev-secrets"
+  secretName: ""
+  # Secret 'gestao-de-alunos-dev-secrets' must be created externally in namespace 'gestao-de-alunos-dev'
+  # Use: ./scripts/create-secrets.sh gestao-de-alunos gestao-de-alunos-dev
+  # Comment out secretName above when secret doesn't exist to prevent pod failures
 sealedSecrets:
   enabled: false
 ingress:
