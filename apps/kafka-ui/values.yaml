@@ -1,0 +1,76 @@
+replicaCount: 1
+
+image:
+  repository: provectuslabs/kafka-ui
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+# Service names for dependencies
+zookeeper:
+  serviceName: "zookeeper"
+  servicePort: 2181
+
+kafka:
+  serviceName: "kafka"
+  internalPort: 29092
+
+env:
+  KAFKA_CLUSTERS_0_NAME: "local"
+  KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:29092"
+  KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: kafka-ui.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+probe:
+  liveness:
+    enabled: true
+    path: /
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readiness:
+    enabled: true
+    path: /
+    initialDelaySeconds: 10
+    periodSeconds: 5
+

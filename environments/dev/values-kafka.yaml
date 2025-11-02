@@ -1,0 +1,25 @@
+# Environment-specific values for Kafka service in dev
+# These values override the defaults in apps/kafka/values.yaml
+
+fullnameOverride: "kafka"
+
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 200m
+    memory: 512Mi
+
+# Service names for dependencies
+# These reference the actual service names in the infrastructure-dev namespace
+zookeeper:
+  serviceName: "zookeeper"  # Simple service name set via fullnameOverride
+  servicePort: 2181
+
+kafka:
+  serviceName: "kafka"  # Simple service name set via fullnameOverride
+  internalPort: 29092
+

@@ -1,0 +1,45 @@
+# Environment-specific values for Kafka UI service in dev
+# These values override the defaults in apps/kafka-ui/values.yaml
+
+fullnameOverride: "kafka-ui"
+
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Service names for dependencies
+# These reference the actual service names in the infrastructure-dev namespace
+zookeeper:
+  serviceName: "zookeeper"  # Simple service name set via fullnameOverride
+  servicePort: 2181
+
+kafka:
+  serviceName: "kafka"  # Simple service name set via fullnameOverride
+  internalPort: 29092
+
+ingress:
+  enabled: true
+  className: "nginx"  # Using nginx ingress controller (same as API gateway)
+  annotations:
+    # Allow access from anywhere
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # Optional: Add CORS headers if needed
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+  hosts:
+    # Use your actual domain or IP-based access
+    # For public access, you can use:
+    # - A specific domain (e.g., kafka-ui.yourdomain.com)
+    # - Or configure via ingress controller's default backend
+    - host: kafka-ui.dev.local  # Update this to your actual domain or use "*" for IP-based access
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+

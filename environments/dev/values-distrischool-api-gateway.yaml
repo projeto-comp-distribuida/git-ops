@@ -1,0 +1,55 @@
+# Environment-specific values for distrischool-api-gateway service in dev
+# These values override the defaults in apps/distrischool-api-gateway/values.yaml
+
+image:
+  repository: distrischooldevacr.azurecr.io/api-gateway
+  tag: "latest"
+
+imagePullSecrets:
+  - name: acr-secret
+
+replicaCount: 2
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+env:
+  - name: SERVER_PORT
+    value: "8080"
+  - name: SPRING_PROFILES_ACTIVE
+    value: "dev"
+  # Service URLs pointing to other microservices in the cluster
+  # Using FQDN format <service-name>.<namespace> for cross-namespace access
+  - name: AUTH_SERVICE_URI
+    value: "http://auth-dev.auth-dev:80"
+  - name: STUDENT_SERVICE_URI
+    value: "http://gestao-de-alunos-dev.gestao-de-alunos-dev:80"
+  - name: TEACHER_SERVICE_URI
+    value: "http://gestao-de-professores-dev.gestao-de-professores-dev:80"
+  # CORS Configuration
+  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS_0_ALLOWED_ORIGINS
+    value: "*"
+  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS_0_ALLOWED_METHODS
+    value: "GET,POST,PUT,DELETE,OPTIONS"
+  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS_0_ALLOWED_HEADERS
+    value: "*"
+  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS_0_ALLOW_CREDENTIALS
+    value: "false"
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+

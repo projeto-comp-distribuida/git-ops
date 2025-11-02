@@ -1,0 +1,21 @@
+# Environment-specific values for Redis service in dev
+# These values override the defaults in apps/redis/values.yaml
+
+fullnameOverride: "redis"
+
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+persistence:
+  enabled: true
+  size: 1Gi
+  accessModes:
+    - ReadWriteOnce
+

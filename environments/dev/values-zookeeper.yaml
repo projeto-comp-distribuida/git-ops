@@ -1,0 +1,18 @@
+# Environment-specific values for Zookeeper service in dev
+# These values override the defaults in apps/zookeeper/values.yaml
+
+fullnameOverride: "zookeeper"
+
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Service configuration - service will be named "zookeeper"
+# Other services can reference it as "zookeeper:2181"
+

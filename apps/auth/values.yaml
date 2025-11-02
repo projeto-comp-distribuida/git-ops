@@ -1,0 +1,87 @@
+replicaCount: 2
+
+image:
+  repository: ""
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env: []
+  # - name: DATABASE_URL
+  #   value: "postgresql://user:pass@host:5432/dbname"
+
+secrets: []
+  # - name: DATABASE_PASSWORD
+  #   secretName: auth-secrets
+  #   key: database-password
+
+sealedSecrets:
+  enabled: false
+  # When enabled, creates a SealedSecret resource
+  # Use kubeseal to encrypt your secrets before adding them here
+  # Example: kubeseal --raw --from-file=secret.yaml -n <namespace>
+  data: {}
+    # database-password: <encrypted-value-from-kubeseal>
+    # api-key: <encrypted-value-from-kubeseal>
+  # Secret name that will be created after unsealing (defaults to <release-name>-auth-secrets)
+  secretName: ""
+
+probe:
+  liveness:
+    enabled: true
+    path: /health
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readiness:
+    enabled: true
+    path: /health
+    initialDelaySeconds: 10
+    periodSeconds: 5
+

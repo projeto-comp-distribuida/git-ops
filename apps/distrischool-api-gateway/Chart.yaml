@@ -1,0 +1,7 @@
+apiVersion: v2
+name: distrischool-api-gateway
+description: DistriSchool API Gateway Helm chart
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+

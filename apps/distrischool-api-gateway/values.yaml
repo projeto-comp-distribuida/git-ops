@@ -1,0 +1,90 @@
+replicaCount: 2
+
+image:
+  repository: ""
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations: {}
+  hosts:
+    - host: api-gateway.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env: []
+  # Gateway Configuration
+  # - name: SERVER_PORT
+  #   value: "8080"
+  # - name: SPRING_PROFILES_ACTIVE
+  #   value: "dev"
+  # Service URLs (will be configured per environment)
+  # - name: AUTH_SERVICE_URI
+  #   value: "http://auth-dev:80"
+  # - name: STUDENT_SERVICE_URI
+  #   value: "http://gestao-de-alunos-dev:80"
+  # - name: TEACHER_SERVICE_URI
+  #   value: "http://gestao-de-professores-dev:80"
+
+secrets: []
+  # - name: DATABASE_PASSWORD
+  #   secretName: api-gateway-secrets
+  #   key: database-password
+
+probe:
+  liveness:
+    enabled: true
+    path: /actuator/health
+    initialDelaySeconds: 60
+    periodSeconds: 10
+  readiness:
+    enabled: true
+    path: /actuator/health
+    initialDelaySeconds: 30
+    periodSeconds: 5
+

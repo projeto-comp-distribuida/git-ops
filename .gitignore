@@ -1,0 +1,28 @@
+# Helm
+*.tgz
+charts/*.tgz
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files with secrets (never commit these!)
+.env
+.env.local
+.env.*.local
+
+# Binaries
+kubeseal
+kubeseal-*.tar.gz
+

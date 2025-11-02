@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: zookeeper-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/projeto-comp-distribuida/git-ops.git
+    targetRevision: HEAD
+    path: apps/zookeeper
+    helm:
+      valueFiles:
+        - values.yaml
+        - ../../environments/dev/values-zookeeper.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: infrastructure-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+

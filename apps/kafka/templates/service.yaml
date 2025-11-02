@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kafka.fullname" . }}
+  labels:
+    {{- include "kafka.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.externalPort }}
+      targetPort: kafka-external
+      protocol: TCP
+      name: kafka-external
+    - port: {{ .Values.service.internalPort }}
+      targetPort: kafka-internal
+      protocol: TCP
+      name: kafka-internal
+  selector:
+    {{- include "kafka.selectorLabels" . | nindent 4 }}
+

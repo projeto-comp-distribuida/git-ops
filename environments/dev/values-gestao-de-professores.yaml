@@ -1,0 +1,72 @@
+image:
+  repository: distrischooldevacr.azurecr.io/microservice-teacher-management-service
+  tag: "latest"
+
+imagePullSecrets:
+  - name: acr-secret
+
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+env:
+  - name: ENVIRONMENT
+    value: "dev"
+  - name: LOG_LEVEL
+    value: "DEBUG"
+  - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+    value: "org.postgresql.Driver"
+  - name: SPRING_REDIS_HOST
+    value: "redis.infrastructure-dev"
+  - name: SPRING_REDIS_PORT
+    value: "6379"
+  - name: SPRING_REDIS_PASSWORD
+    value: ""
+  - name: KAFKA_BOOTSTRAP_SERVERS
+    value: "kafka.infrastructure-dev:29092"
+  - name: SERVER_PORT
+    value: "8080"
+  - name: GRPC_SERVER_PORT
+    value: "9090"
+  - name: ALLOWED_ORIGINS
+    value: "*"
+  - name: MAX_LOGIN_ATTEMPTS
+    value: "5"
+  - name: ACCOUNT_LOCK_DURATION
+    value: "30"
+  - name: PASSWORD_RESET_TOKEN_EXPIRATION
+    value: "2"
+  - name: EMAIL_VERIFICATION_TOKEN_EXPIRATION
+    value: "24"
+  - name: SPRING_FLYWAY_ENABLED
+    value: "true"
+  - name: SPRING_FLYWAY_LOCATIONS
+    value: "classpath:db/migration"
+  - name: SPRING_FLYWAY_BASELINE_ON_MIGRATE
+    value: "true"
+  - name: AUTH0_ENABLED
+    value: "true"
+  - name: AUTH0_CONNECTION
+    value: "Username-Password-Authentication"
+  - name: ACR_REGISTRY
+    value: "distrischooldevacr.azurecr.io"
+  - name: NEXT_PUBLIC_API_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
+  - name: NEXT_PUBLIC_AUTH_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/auth"
+  - name: NEXT_PUBLIC_STUDENT_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/students"
+  - name: NEXT_PUBLIC_TEACHER_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/teachers"
+
+ingress:
+  enabled: false
+  className: ""
+  hosts: []
+
