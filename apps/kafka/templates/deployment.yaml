@@ -47,6 +47,11 @@ spec:
               value: {{ $value | quote }}
             {{- end }}
             {{- end }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: kafka-data
+              mountPath: /var/lib/kafka/data
+          {{- end }}
           {{- if .Values.probe.startup.enabled }}
           startupProbe:
             exec:
@@ -85,6 +90,12 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.persistence.enabled }}
+      volumes:
+        - name: kafka-data
+          persistentVolumeClaim:
+            claimName: {{ include "kafka.fullname" . }}-data
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

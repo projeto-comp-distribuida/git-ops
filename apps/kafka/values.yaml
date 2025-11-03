@@ -41,14 +41,26 @@ env:
   KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
   KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
   KAFKA_LOG_DIRS: "/var/lib/kafka/data"
+  # Additional stability configurations
+  KAFKA_NUM_PARTITIONS: "3"
+  KAFKA_DEFAULT_REPLICATION_FACTOR: "1"
+  KAFKA_MIN_INSYNC_REPLICAS: "1"
+  KAFKA_LOG_RETENTION_HOURS: "168"
+  KAFKA_LOG_SEGMENT_BYTES: "1073741824"
+  KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: "300000"
+  KAFKA_NUM_NETWORK_THREADS: "8"
+  KAFKA_NUM_IO_THREADS: "8"
+  KAFKA_SOCKET_SEND_BUFFER_BYTES: "102400"
+  KAFKA_SOCKET_RECEIVE_BUFFER_BYTES: "102400"
+  KAFKA_SOCKET_REQUEST_MAX_BYTES: "104857600"
 
 resources:
   limits:
     cpu: 1000m
-    memory: 1Gi
+    memory: 2Gi
   requests:
     cpu: 200m
-    memory: 512Mi
+    memory: 1Gi
 
 nodeSelector: {}
 
@@ -56,23 +68,30 @@ tolerations: []
 
 affinity: {}
 
+persistence:
+  enabled: true
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+
 probe:
   startup:
     enabled: true
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 30
-  liveness:
-    enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
-    timeoutSeconds: 10
+    timeoutSeconds: 30
+    failureThreshold: 60
+  liveness:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 30
     failureThreshold: 5
   readiness:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 60
     periodSeconds: 10
-    timeoutSeconds: 10
+    timeoutSeconds: 30
     failureThreshold: 5
 

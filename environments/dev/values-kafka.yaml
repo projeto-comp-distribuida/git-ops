@@ -8,10 +8,10 @@ replicaCount: 1
 resources:
   limits:
     cpu: 1000m
-    memory: 1Gi
+    memory: 2Gi
   requests:
     cpu: 200m
-    memory: 512Mi
+    memory: 1Gi
 
 # Service names for dependencies
 # These reference the actual service names in the infrastructure-dev namespace
@@ -22,4 +22,33 @@ zookeeper:
 kafka:
   serviceName: "kafka"  # Simple service name set via fullnameOverride
   internalPort: 29092
+
+# Persistent volume configuration
+persistence:
+  enabled: true
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""  # Use default storage class
+
+# Probe configuration overrides
+probe:
+  startup:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 30
+    failureThreshold: 60
+  liveness:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 30
+    failureThreshold: 5
+  readiness:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 30
+    failureThreshold: 5
 
