@@ -14,10 +14,10 @@ replicaCount: 1
 resources:
   limits:
     cpu: 500m
-    memory: 1Gi
+    memory: 1Gi  # Keep at 1Gi - idle usage ~341Mi, but Spring Boot apps can use 2-3x under load
   requests:
     cpu: 100m
-    memory: 512Mi
+    memory: 400Mi  # Optimized: idle ~341Mi, reduced from 512Mi but still provides buffer for normal operation
 
 env:
   - name: ENVIRONMENT

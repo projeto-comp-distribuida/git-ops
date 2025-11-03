@@ -10,10 +10,10 @@ replicaCount: 1
 resources:
   limits:
     cpu: 500m
-    memory: 1Gi
+    memory: 768Mi  # Optimized: actual usage ~334Mi, reduced from 1Gi to allow headroom for spikes
   requests:
     cpu: 100m
-    memory: 512Mi
+    memory: 384Mi  # Optimized: actual usage ~334Mi, reduced from 512Mi to better match usage
 
 env:
   - name: ENVIRONMENT
