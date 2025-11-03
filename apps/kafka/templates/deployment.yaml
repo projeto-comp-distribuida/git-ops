@@ -33,7 +33,7 @@ spec:
       initContainers:
         - name: volume-permissions
           image: busybox:1.36
-          command: ['sh', '-c', 'chown -R 1000:1000 /var/lib/kafka/data && chmod -R 755 /var/lib/kafka/data']
+          command: ['sh', '-c', 'rm -rf /var/lib/kafka/data/lost+found && chown -R 1000:1000 /var/lib/kafka/data && chmod -R 755 /var/lib/kafka/data']
           volumeMounts:
             - name: kafka-data
               mountPath: /var/lib/kafka/data
@@ -44,6 +44,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              unset KAFKA_PORT || true
+              exec /etc/confluent/docker/run
           ports:
             - name: kafka-internal
               containerPort: {{ .Values.service.internalPort }}
@@ -52,6 +57,8 @@ spec:
               containerPort: {{ .Values.service.externalPort }}
               protocol: TCP
           env:
+            - name: KAFKA_PORT
+              value: ""
             - name: KAFKA_LISTENERS
               value: "PLAINTEXT://0.0.0.0:{{ .Values.service.internalPort }},PLAINTEXT_HOST://0.0.0.0:{{ .Values.service.externalPort }}"
             - name: KAFKA_ADVERTISED_LISTENERS
