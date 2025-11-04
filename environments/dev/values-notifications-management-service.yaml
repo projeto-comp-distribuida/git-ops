@@ -22,6 +22,8 @@ env:
     value: "DEBUG"
   - name: SERVER_PORT
     value: "8080"
+  - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+    value: "org.postgresql.Driver"
   - name: SPRING_FLYWAY_ENABLED
     value: "true"
   - name: SPRING_FLYWAY_LOCATIONS
