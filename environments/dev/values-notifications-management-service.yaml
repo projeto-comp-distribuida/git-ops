@@ -34,6 +34,10 @@ env:
     value: "kafka.infrastructure-dev:29092"
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_AUTO_OFFSET_RESET
     value: "earliest"
+  - name: SPRING_KAFKA_CONSUMER_PROPERTIES_ENABLE_AUTO_COMMIT
+    value: "true"
+  - name: SPRING_KAFKA_CONSUMER_PROPERTIES_FETCH_MIN_BYTES
+    value: "1"
 
 secrets:
   enabled: false
