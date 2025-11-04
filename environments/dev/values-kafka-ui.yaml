@@ -3,7 +3,7 @@
 
 fullnameOverride: "kafka-ui"
 
-replicaCount: 1
+replicaCount: 0
 
 resources:
   limits:
