@@ -29,3 +29,8 @@ kubeseal-*.tar.gz
 .config
 config
 # Note: /scripts was removed - we want to commit scripts, just not .env files
+
+
+
+
+

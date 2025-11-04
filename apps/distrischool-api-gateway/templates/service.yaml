@@ -15,3 +15,8 @@ spec:
     {{- include "distrischool-api-gateway.selectorLabels" . | nindent 4 }}
 
 
+
+
+
+
+

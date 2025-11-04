@@ -1,7 +1,17 @@
 #!/bin/bash
 # Script to create Kubernetes secrets from .env file
-# Usage: ./scripts/create-secrets.sh <service-name> <namespace>
-# Example: ./scripts/create-secrets.sh auth auth-dev
+#
+# Single:
+#   Usage: ./scripts/create-secrets.sh <service-name> <namespace>
+#   Example: ./scripts/create-secrets.sh auth auth-dev
+#
+# Batch (all services into one namespace):
+#   Usage: ./scripts/create-secrets.sh --all-in-namespace <namespace>
+#   Example: ./scripts/create-secrets.sh --all-in-namespace distrischool
+#
+# Batch (matrix file with pairs "service namespace" per line):
+#   Usage: ./scripts/create-secrets.sh --matrix <file>
+#   Example: ./scripts/create-secrets.sh --matrix services-namespaces.txt
 
 set -e
 
@@ -9,14 +19,49 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 CONFIG_FILE="${KUBECONFIG:-$REPO_ROOT/config}"
 
-if [ "$#" -lt 2 ]; then
-    echo "Usage: $0 <service-name> <namespace>"
-    echo "Example: $0 auth auth-dev"
+MODE="single"
+SERVICE_NAME=""
+NAMESPACE=""
+MATRIX_FILE=""
+
+if [ "$#" -eq 0 ]; then
+    echo "Usage: $0 <service-name> <namespace> | --all-in-namespace <namespace> | --matrix <file>"
+    echo "Examples:"
+    echo "  $0 auth auth-dev"
+    echo "  $0 --all-in-namespace distrischool"
+    echo "  $0 --matrix services-namespaces.txt"
     exit 1
 fi
 
-SERVICE_NAME=$1
-NAMESPACE=$2
+if [ "$1" = "--all-in-namespace" ]; then
+    if [ "$#" -lt 2 ]; then
+        echo "❌ Error: missing <namespace> for --all-in-namespace"
+        exit 1
+    fi
+    MODE="all_in_namespace"
+    NAMESPACE=$2
+elif [ "$1" = "--matrix" ]; then
+    if [ "$#" -lt 2 ]; then
+        echo "❌ Error: missing <file> for --matrix"
+        exit 1
+    fi
+    MODE="matrix"
+    MATRIX_FILE=$2
+    if [ ! -f "$MATRIX_FILE" ]; then
+        echo "❌ Error: matrix file not found at $MATRIX_FILE"
+        exit 1
+    fi
+else
+    if [ "$#" -lt 2 ]; then
+        echo "Usage: $0 <service-name> <namespace> | --all-in-namespace <namespace> | --matrix <file>"
+        exit 1
+    fi
+    MODE="single"
+    SERVICE_NAME=$1
+    NAMESPACE=$2
+fi
+
+APPS_DIR="$REPO_ROOT/apps"
 
 if [ -f "$CONFIG_FILE" ]; then
     export KUBECONFIG="$CONFIG_FILE"
@@ -41,26 +86,77 @@ if ! kubectl get namespace "$NAMESPACE" &> /dev/null; then
     kubectl create namespace "$NAMESPACE"
 fi
 
-SECRET_NAME="${SERVICE_NAME}-dev-secrets"
+create_or_update_secret() {
+    local svc_name="$1"
+    local ns_name="$2"
+    local secret_name="${svc_name}-dev-secrets"
 
-echo "🔐 Creating secret: $SECRET_NAME in namespace: $NAMESPACE"
-echo ""
+    # Ensure namespace exists
+    if ! kubectl get namespace "$ns_name" &> /dev/null; then
+        echo "⚠️  Namespace $ns_name does not exist, creating it..."
+        kubectl create namespace "$ns_name"
+    fi
 
-# Create secret from .env variables
-kubectl create secret generic "$SECRET_NAME" \
-    --from-literal=auth0-domain="$AUTH0_DOMAIN" \
-    --from-literal=auth0-client-id="$AUTH0_CLIENT_ID" \
-    --from-literal=auth0-client-secret="$AUTH0_CLIENT_SECRET" \
-    --from-literal=auth0-audience="$AUTH0_AUDIENCE" \
-    --from-literal=spring-datasource-url="$SPRING_DATASOURCE_URL" \
-    --from-literal=spring-datasource-username="$SPRING_DATASOURCE_USERNAME" \
-    --from-literal=spring-datasource-password="$SPRING_DATASOURCE_PASSWORD" \
-    -n "$NAMESPACE" \
-    --dry-run=client -o yaml | kubectl apply -f -
+    echo "🔐 Creating/Updating secret: $secret_name in namespace: $ns_name"
 
-echo ""
-echo "✅ Secret created successfully!"
-echo ""
-echo "The secret '$SECRET_NAME' is now available in namespace '$NAMESPACE'"
-echo "Your Helm charts will reference this secret automatically."
+    kubectl create secret generic "$secret_name" \
+        --from-literal=auth0-domain="$AUTH0_DOMAIN" \
+        --from-literal=auth0-client-id="$AUTH0_CLIENT_ID" \
+        --from-literal=auth0-client-secret="$AUTH0_CLIENT_SECRET" \
+        --from-literal=auth0-audience="$AUTH0_AUDIENCE" \
+        --from-literal=spring-datasource-url="$SPRING_DATASOURCE_URL" \
+        --from-literal=spring-datasource-username="$SPRING_DATASOURCE_USERNAME" \
+        --from-literal=spring-datasource-password="$SPRING_DATASOURCE_PASSWORD" \
+        -n "$ns_name" \
+        --dry-run=client -o yaml | kubectl apply -f -
+
+    echo "✅ Secret '$secret_name' applied to namespace '$ns_name'"
+    echo ""
+}
+
+list_services() {
+    # List app directories as service names, excluding infra/non-service entries
+    if [ -d "$APPS_DIR" ]; then
+        find "$APPS_DIR" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | grep -Ev '^(argocd|kafka|kafka-ui|redis|zookeeper)$' | sort
+    else
+        echo ""
+    fi
+}
+
+case "$MODE" in
+    single)
+        create_or_update_secret "$SERVICE_NAME" "$NAMESPACE"
+        ;;
+    all_in_namespace)
+        SERVICES=$(list_services)
+        if [ -z "$SERVICES" ]; then
+            echo "❌ Error: could not determine services under $APPS_DIR"
+            exit 1
+        fi
+        echo "📦 Processing services in '$APPS_DIR' for namespace '$NAMESPACE'"
+        echo "$SERVICES" | while read -r svc; do
+            [ -z "$svc" ] && continue
+            create_or_update_secret "$svc" "$NAMESPACE"
+        done
+        ;;
+    matrix)
+        echo "📚 Reading service/namespace pairs from $MATRIX_FILE"
+        while read -r svc ns; do
+            # skip empty and comment lines
+            if echo "$svc" | grep -qE '^(#|$)'; then
+                continue
+            fi
+            if [ -z "$svc" ] || [ -z "$ns" ]; then
+                continue
+            fi
+            create_or_update_secret "$svc" "$ns"
+        done < "$MATRIX_FILE"
+        ;;
+    *)
+        echo "❌ Error: unknown mode '$MODE'"
+        exit 1
+        ;;
+esac
+
+echo "All requested secrets are up to date."
 
