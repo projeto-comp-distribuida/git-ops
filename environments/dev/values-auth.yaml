@@ -78,8 +78,6 @@ env:
     value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/students"
   - name: NEXT_PUBLIC_TEACHER_SERVICE_URL
     value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/teachers"
-  - name: JAVA_TOOL_OPTIONS
-    value: "-XX:MaxRAMPercentage=65 -Xmx512m"
 
 secrets:
   enabled: false
