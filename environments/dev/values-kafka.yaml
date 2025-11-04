@@ -8,10 +8,10 @@ replicaCount: 1
 resources:
   limits:
     cpu: 1000m
-    memory: 1Gi
+    memory: 768Mi
   requests:
     cpu: 200m
-    memory: 512Mi
+    memory: 256Mi
 
 # Service names for dependencies
 # These reference the actual service names in the infrastructure-dev namespace
@@ -22,6 +22,10 @@ zookeeper:
 kafka:
   serviceName: "kafka"  # Simple service name set via fullnameOverride
   internalPort: 29092
+
+# Cap Kafka JVM heap to fit within limit while leaving headroom
+env:
+  KAFKA_HEAP_OPTS: "-Xms256m -Xmx512m"
 
 # Persistent volume configuration
 persistence:
