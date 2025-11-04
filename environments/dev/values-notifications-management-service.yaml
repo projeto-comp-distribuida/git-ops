@@ -30,6 +30,8 @@ env:
     value: "true"
   - name: SPRING_FLYWAY_OUT_OF_ORDER
     value: "true"
+  - name: KAFKA_BOOTSTRAP_SERVERS
+    value: "kafka.infrastructure-dev:29092"
 
 secrets:
   enabled: false

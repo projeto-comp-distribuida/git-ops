@@ -14,3 +14,5 @@ spec:
   selector:
     {{- include "notifications-management-service.selectorLabels" . | nindent 4 }}
 
+
+
