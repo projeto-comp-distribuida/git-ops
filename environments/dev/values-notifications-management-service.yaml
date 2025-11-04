@@ -1,0 +1,38 @@
+image:
+  repository: distrischooldevacr.azurecr.io/notifications-management-service
+  tag: "latest"
+
+imagePullSecrets:
+  - name: acr-secret
+
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+env:
+  - name: ENVIRONMENT
+    value: "dev"
+  - name: LOG_LEVEL
+    value: "DEBUG"
+  - name: SERVER_PORT
+    value: "8080"
+
+ingress:
+  enabled: false
+  className: ""
+  hosts: []
+
+probe:
+  startup:
+    enabled: false
+  liveness:
+    enabled: false
+  readiness:
+    enabled: false
+

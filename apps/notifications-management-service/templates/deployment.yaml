@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "notifications-management-service.fullname" . }}
+  labels:
+    {{- include "notifications-management-service.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "notifications-management-service.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "notifications-management-service.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "notifications-management-service.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          {{- if .Values.probe.startup.enabled }}
+          startupProbe:
+            {{- if .Values.probe.startup.useTcpSocket }}
+            tcpSocket:
+              port: http
+            {{- else }}
+            httpGet:
+              path: {{ .Values.probe.startup.path }}
+              port: http
+            {{- end }}
+            initialDelaySeconds: {{ .Values.probe.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probe.startup.periodSeconds }}
+            timeoutSeconds: {{ .Values.probe.startup.timeoutSeconds }}
+            failureThreshold: {{ .Values.probe.startup.failureThreshold }}
+          {{- end }}
+          {{- if .Values.probe.liveness.enabled }}
+          livenessProbe:
+            {{- if .Values.probe.liveness.useTcpSocket }}
+            tcpSocket:
+              port: http
+            {{- else }}
+            httpGet:
+              path: {{ .Values.probe.liveness.path }}
+              port: http
+            {{- end }}
+            initialDelaySeconds: {{ .Values.probe.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probe.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probe.liveness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probe.liveness.failureThreshold }}
+          {{- end }}
+          {{- if .Values.probe.readiness.enabled }}
+          readinessProbe:
+            {{- if .Values.probe.readiness.useTcpSocket }}
+            tcpSocket:
+              port: http
+            {{- else }}
+            httpGet:
+              path: {{ .Values.probe.readiness.path }}
+              port: http
+            {{- end }}
+            initialDelaySeconds: {{ .Values.probe.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probe.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probe.readiness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probe.readiness.failureThreshold }}
+          {{- end }}
+          env:
+            {{- range .Values.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+            {{- if kindIs "slice" .Values.secrets }}
+            {{- range .Values.secrets }}
+            - name: {{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .key }}
+            {{- end }}
+            {{- end }}
+            {{- if and (not (kindIs "slice" .Values.secrets)) .Values.secrets.secretName }}
+            {{- $secretName := .Values.secrets.secretName | default (printf "%s-secrets" (include "notifications-management-service.fullname" .)) }}
+            {{- if .Values.secrets.enabled }}
+            {{- range $key, $value := .Values.secrets.data }}
+            - name: {{ $key | upper | replace "-" "_" }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ $key }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+

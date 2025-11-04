@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: notifications-management-service-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/projeto-comp-distribuida/git-ops.git
+    targetRevision: HEAD
+    path: apps/notifications-management-service
+    helm:
+      valueFiles:
+        - values.yaml
+        - ../../environments/dev/values-notifications-management-service.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: notifications-management-service-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+
+
