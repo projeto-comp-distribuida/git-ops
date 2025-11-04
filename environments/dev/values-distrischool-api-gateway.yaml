@@ -31,6 +31,8 @@ env:
     value: "http://gestao-de-alunos-dev.gestao-de-alunos-dev:80"
   - name: TEACHER_SERVICE_URI
     value: "http://gestao-de-professores-dev.gestao-de-professores-dev:80"
+  - name: NOTIFICATIONS_SERVICE_URI
+    value: "http://notifications-management-service-dev.notifications-management-service-dev:80"
   # Route Configuration (matching docker-compose exactly - no path rewriting, backend receives full path)
   # Auth Service Route
   - name: SPRING_CLOUD_GATEWAY_ROUTES_0_ID
@@ -75,6 +77,17 @@ env:
   - name: SPRING_CLOUD_GATEWAY_ROUTES_3_FILTERS_0
     value: "RemoveRequestHeader=Origin"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_3_FILTERS_1
+    value: "RemoveRequestHeader=Referer"
+  # Notifications Service Route
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_4_ID
+    value: "notifications-service"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_4_URI
+    value: "http://notifications-management-service-dev.notifications-management-service-dev:80"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_4_PREDICATES_0
+    value: "Path=/api/v1/notifications/**"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_4_FILTERS_0
+    value: "RemoveRequestHeader=Origin"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_4_FILTERS_1
     value: "RemoveRequestHeader=Referer"
   # CORS Configuration (using docker-compose format with ____ for nested properties)
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_ORIGINS
