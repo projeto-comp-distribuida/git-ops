@@ -34,7 +34,7 @@ env:
     value: ""
   - name: KAFKA_BOOTSTRAP_SERVERS
     value: "kafka.infrastructure-dev:29092"
-  - name: SPRING_KAFKA_PRODUCER_PROPERTIES_COMPRESSION_TYPE
+  - name: SPRING_KAFKA_PRODUCER_COMPRESSION_TYPE
     value: "none"
   - name: SERVER_PORT
     value: "8080"
