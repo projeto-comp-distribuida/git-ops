@@ -22,6 +22,14 @@ env:
     value: "DEBUG"
   - name: SERVER_PORT
     value: "8080"
+  - name: SPRING_FLYWAY_ENABLED
+    value: "true"
+  - name: SPRING_FLYWAY_LOCATIONS
+    value: "classpath:db/migration"
+  - name: SPRING_FLYWAY_REPAIR_ON_MIGRATE
+    value: "true"
+  - name: SPRING_FLYWAY_OUT_OF_ORDER
+    value: "true"
 
 secrets:
   enabled: false
