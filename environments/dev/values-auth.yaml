@@ -99,10 +99,10 @@ probe:
     enabled: true
     useTcpSocket: true  # Use TCP socket instead of HTTP - faster and checks if port is open
     path: /api/v1/auth/health  # Only used if useTcpSocket is false
-    initialDelaySeconds: 60
+    initialDelaySeconds: 120  # Increased from 60 - allow more time before first probe
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 60  # Total: 60 + (60 * 10) = 660 seconds = 11 minutes max startup time
+    failureThreshold: 90  # Increased from 60 - Total: 120 + (90 * 10) = 1020 seconds = 17 minutes max startup time
   liveness:
     enabled: true
     path: /api/v1/auth/health
