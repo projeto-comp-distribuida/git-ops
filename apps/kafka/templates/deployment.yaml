@@ -82,11 +82,8 @@ spec:
           {{- end }}
           {{- if .Values.probe.startup.enabled }}
           startupProbe:
-            exec:
-              command:
-                - kafka-broker-api-versions
-                - --bootstrap-server
-                - localhost:{{ .Values.service.internalPort }}
+            tcpSocket:
+              port: {{ .Values.service.internalPort }}
             initialDelaySeconds: {{ .Values.probe.startup.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.startup.periodSeconds }}
             timeoutSeconds: {{ .Values.probe.startup.timeoutSeconds }}
@@ -94,11 +91,8 @@ spec:
           {{- end }}
           {{- if .Values.probe.liveness.enabled }}
           livenessProbe:
-            exec:
-              command:
-                - kafka-broker-api-versions
-                - --bootstrap-server
-                - localhost:{{ .Values.service.internalPort }}
+            tcpSocket:
+              port: {{ .Values.service.internalPort }}
             initialDelaySeconds: {{ .Values.probe.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.liveness.periodSeconds }}
             timeoutSeconds: {{ .Values.probe.liveness.timeoutSeconds }}
@@ -106,11 +100,8 @@ spec:
           {{- end }}
           {{- if .Values.probe.readiness.enabled }}
           readinessProbe:
-            exec:
-              command:
-                - kafka-broker-api-versions
-                - --bootstrap-server
-                - localhost:{{ .Values.service.internalPort }}
+            tcpSocket:
+              port: {{ .Values.service.internalPort }}
             initialDelaySeconds: {{ .Values.probe.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probe.readiness.periodSeconds }}
             timeoutSeconds: {{ .Values.probe.readiness.timeoutSeconds }}
