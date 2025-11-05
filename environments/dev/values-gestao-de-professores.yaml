@@ -10,10 +10,10 @@ replicaCount: 1
 resources:
   limits:
     cpu: 500m
-    memory: 768Mi  # Optimized: actual usage ~334Mi, reduced from 1Gi to allow headroom for spikes
+    # Memory limits removed to allow faster startup - Spring Boot needs more memory during initialization
   requests:
     cpu: 100m
-    memory: 384Mi  # Optimized: actual usage ~334Mi, reduced from 512Mi to better match usage
+    # Memory requests removed to allow faster startup - Spring Boot needs more memory during initialization
 
 env:
   - name: ENVIRONMENT
@@ -100,7 +100,7 @@ probe:
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 60  # Total: 60 + (60 * 10) = 660 seconds = 11 minutes max startup time
+    failureThreshold: 120  # Total: 60 + (120 * 10) = 1260 seconds = 21 minutes max startup time (increased for slow Spring Boot initialization)
   liveness:
     enabled: true
     useTcpSocket: true  # Use TCP socket instead of HTTP - avoids auth issues
