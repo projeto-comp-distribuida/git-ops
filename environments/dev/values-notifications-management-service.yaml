@@ -77,7 +77,12 @@ ingress:
 
 probe:
   startup:
-    enabled: false
+    enabled: true
+    useTcpSocket: true
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 10
+    failureThreshold: 48  # Total: 60 + (48 * 30) = 1500 seconds = 25 minutes
   liveness:
     enabled: false
   readiness:
