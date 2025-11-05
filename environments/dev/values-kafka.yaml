@@ -26,6 +26,9 @@ kafka:
 # Cap Kafka JVM heap to fit within limit while leaving headroom
 env:
   KAFKA_HEAP_OPTS: "-Xms256m -Xmx512m"
+  # Use gzip compression instead of Snappy for better Alpine Linux compatibility
+  # This matches the docker-compose.yml configuration
+  KAFKA_COMPRESSION_TYPE: gzip
 
 # Persistent volume configuration
 persistence:
