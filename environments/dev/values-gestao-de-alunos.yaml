@@ -74,8 +74,6 @@ env:
     value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/students"
   - name: NEXT_PUBLIC_TEACHER_SERVICE_URL
     value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/teachers"
-  - name: JAVA_TOOL_OPTIONS
-    value: "-XX:MaxRAMPercentage=65 -Xmx384m"
 
 secrets:
   enabled: false
@@ -109,7 +107,8 @@ probe:
     failureThreshold: 3
   readiness:
     enabled: true
-    path: /api/v1/students/health
+    useTcpSocket: true  # Use TCP socket instead of HTTP - avoids auth issues
+    path: /api/v1/students/health  # Only used if useTcpSocket is false
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
