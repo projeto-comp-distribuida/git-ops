@@ -43,6 +43,10 @@ env:
     value: "true"
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_FETCH_MIN_BYTES
     value: "1"
+  # Force Snappy to use pure Java implementation to avoid native library compatibility issues
+  # This must be set before Kafka tries to load Snappy
+  - name: JAVA_TOOL_OPTIONS
+    value: "-Dorg.xerial.snappy.purejava=true"
   # Configure error handling to prevent consumer crashes
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_VALUE_DESERIALIZER
     value: "org.springframework.kafka.support.serializer.ErrorHandlingDeserializer"
