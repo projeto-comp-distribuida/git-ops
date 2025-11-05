@@ -1,6 +1,7 @@
 image:
   repository: distrischooldevacr.azurecr.io/notifications-management-service
   tag: "latest"
+  pullPolicy: Always
 
 imagePullSecrets:
   - name: acr-secret
@@ -42,6 +43,15 @@ env:
     value: "true"
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_FETCH_MIN_BYTES
     value: "1"
+  # Configure error handling to prevent consumer crashes
+  - name: SPRING_KAFKA_CONSUMER_PROPERTIES_VALUE_DESERIALIZER
+    value: "org.springframework.kafka.support.serializer.ErrorHandlingDeserializer"
+  - name: SPRING_KAFKA_CONSUMER_PROPERTIES_SPRING_DESERIALIZER_VALUE_DESERIALIZER
+    value: "org.springframework.kafka.support.serializer.JsonDeserializer"
+  - name: SPRING_KAFKA_CONSUMER_PROPERTIES_SPRING_JSON_TRUSTED_PACKAGES
+    value: "*"
+  - name: SPRING_KAFKA_LISTENER_ERROR_HANDLER
+    value: "org.springframework.kafka.listener.DefaultErrorHandler"
 
 secrets:
   enabled: false
