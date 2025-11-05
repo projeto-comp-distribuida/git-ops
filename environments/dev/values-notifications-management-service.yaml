@@ -43,6 +43,11 @@ env:
     value: "true"
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_FETCH_MIN_BYTES
     value: "1"
+  # Force Snappy to use pure Java mode (no native libraries)
+  # Snappy is included for decompression only - to handle Snappy-compressed messages from Kafka
+  # We don't compress with Snappy (compression.type: none), but we need it to decompress existing messages
+  - name: JAVA_TOOL_OPTIONS
+    value: "-Dorg.xerial.snappy.purejava=true"
   # Configure error handling to prevent consumer crashes
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_VALUE_DESERIALIZER
     value: "org.springframework.kafka.support.serializer.ErrorHandlingDeserializer"
