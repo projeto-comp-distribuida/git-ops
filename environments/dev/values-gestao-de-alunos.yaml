@@ -98,7 +98,7 @@ probe:
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 60  # Total: 60 + (60 * 10) = 660 seconds = 11 minutes max startup time
+    failureThreshold: 120  # Total: 60 + (120 * 10) = 1260 seconds = 21 minutes max startup time (increased for slow Spring Boot initialization)
   liveness:
     enabled: true
     useTcpSocket: true  # Use TCP socket instead of HTTP - avoids auth issues
@@ -109,8 +109,7 @@ probe:
     failureThreshold: 3
   readiness:
     enabled: true
-    useTcpSocket: true  # Use TCP socket instead of HTTP - avoids auth issues
-    path: /api/v1/students/health  # Only used if useTcpSocket is false
+    path: /api/v1/students/health
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5

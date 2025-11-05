@@ -111,8 +111,7 @@ probe:
     failureThreshold: 3
   readiness:
     enabled: true
-    useTcpSocket: true  # Use TCP socket instead of HTTP - avoids auth issues
-    path: /api/v1/teachers/health  # Only used if useTcpSocket is false
+    path: /api/v1/teachers/health
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
