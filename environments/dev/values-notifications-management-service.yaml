@@ -52,6 +52,15 @@ env:
     value: "*"
   - name: SPRING_KAFKA_LISTENER_ERROR_HANDLER
     value: "org.springframework.kafka.listener.DefaultErrorHandler"
+  # Disable Snappy compression support to avoid native library compatibility issues
+  # This prevents Kafka from trying to decompress Snappy-compressed messages
+  - name: SPRING_KAFKA_CONSUMER_PROPERTIES_COMPRESSION_TYPE
+    value: "none"
+  - name: SPRING_KAFKA_CONSUMER_PROPERTIES_FETCH_MAX_BYTES
+    value: "10485760"
+  # Skip messages that can't be deserialized
+  - name: SPRING_KAFKA_CONSUMER_PROPERTIES_SPRING_DESERIALIZER_VALUE_DESERIALIZER_EXCEPTION_HANDLER
+    value: "org.springframework.kafka.listener.DefaultErrorHandler"
 
 secrets:
   enabled: false
