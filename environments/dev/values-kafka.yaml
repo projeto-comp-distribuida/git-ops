@@ -26,9 +26,9 @@ kafka:
 # Cap Kafka JVM heap to fit within limit while leaving headroom
 env:
   KAFKA_HEAP_OPTS: "-Xms256m -Xmx512m"
-  # Use gzip compression instead of Snappy for better Alpine Linux compatibility
-  # This matches the docker-compose.yml configuration
-  KAFKA_COMPRESSION_TYPE: gzip
+  # NOTE: KAFKA_COMPRESSION_TYPE is NOT a valid Kafka broker environment variable
+  # Compression is controlled by PRODUCERS, not brokers. Kafka brokers don't enforce compression.
+  # All producers should be configured with SPRING_KAFKA_PRODUCER_COMPRESSION_TYPE: "none" or "gzip"
 
 # Persistent volume configuration
 persistence:

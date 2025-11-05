@@ -35,17 +35,21 @@ env:
     value: "true"
   - name: KAFKA_BOOTSTRAP_SERVERS
     value: "kafka.infrastructure-dev:29092"
+  # Producer configuration - ensure no compression (or use gzip if needed)
   - name: SPRING_KAFKA_PRODUCER_COMPRESSION_TYPE
     value: "none"
+  # Consumer configuration - must be able to decompress any format
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_AUTO_OFFSET_RESET
     value: "earliest"
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_ENABLE_AUTO_COMMIT
     value: "true"
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_FETCH_MIN_BYTES
     value: "1"
-  # Force Snappy to use pure Java mode (no native libraries)
-  # Snappy is included for decompression only - to handle Snappy-compressed messages from Kafka
-  # We don't compress with Snappy (compression.type: none), but we need it to decompress existing messages
+  # Enable Snappy decompression support for consumers
+  # Kafka uses its own Snappy implementation (not xerial.snappy)
+  # The Kafka client library should handle Snappy automatically, but we ensure Java mode
+  # This is needed if there are existing Snappy-compressed messages in topics
+  # Note: Kafka's Snappy codec will automatically fall back to pure Java if native libs unavailable
   - name: JAVA_TOOL_OPTIONS
     value: "-Dorg.xerial.snappy.purejava=true"
   # Configure error handling to prevent consumer crashes
