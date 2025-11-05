@@ -43,10 +43,6 @@ env:
     value: "true"
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_FETCH_MIN_BYTES
     value: "1"
-  # Force Snappy to use pure Java implementation to avoid native library compatibility issues
-  # This must be set before Kafka tries to load Snappy
-  - name: JAVA_TOOL_OPTIONS
-    value: "-Dorg.xerial.snappy.purejava=true"
   # Configure error handling to prevent consumer crashes
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_VALUE_DESERIALIZER
     value: "org.springframework.kafka.support.serializer.ErrorHandlingDeserializer"
@@ -56,10 +52,6 @@ env:
     value: "*"
   - name: SPRING_KAFKA_LISTENER_ERROR_HANDLER
     value: "org.springframework.kafka.listener.DefaultErrorHandler"
-  # Disable Snappy compression support to avoid native library compatibility issues
-  # This prevents Kafka from trying to decompress Snappy-compressed messages
-  - name: SPRING_KAFKA_CONSUMER_PROPERTIES_COMPRESSION_TYPE
-    value: "none"
   - name: SPRING_KAFKA_CONSUMER_PROPERTIES_FETCH_MAX_BYTES
     value: "10485760"
   # Skip messages that can't be deserialized
