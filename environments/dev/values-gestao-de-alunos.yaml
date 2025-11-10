@@ -1,7 +1,7 @@
 image:
   repository: distrischooldevacr.azurecr.io/microservice-student-management-service
   tag: "latest"
-
+  pullPolicy: Always
 imagePullSecrets:
   - name: acr-secret
 
