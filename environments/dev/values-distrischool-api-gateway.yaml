@@ -95,8 +95,9 @@ env:
   - name: SPRING_CLOUD_GATEWAY_ROUTES_5_PREDICATES_0
     value: "Path=/ws/notifications"
   # CORS Configuration (using docker-compose format with ____ for nested properties)
+  # Allow both IP and DNS name origins since browser may send either
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_ORIGINS
-    value: "*"
+    value: "http://130.131.18.12,http://distrischool.ddns.net"
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_METHODS
     value: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_HEADERS
@@ -119,7 +120,8 @@ ingress:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     # When allow-credentials is true, cannot use wildcard (*) - CORS spec restriction
     # Set to false to allow wildcard origins, or specify exact origins
-    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    # Allow both IP and DNS name origins since browser may send either
+    nginx.ingress.kubernetes.io/cors-allow-origin: "http://130.131.18.12, http://distrischool.ddns.net"
     nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS, PATCH"
     nginx.ingress.kubernetes.io/cors-allow-headers: "*"
     nginx.ingress.kubernetes.io/cors-allow-credentials: "false"
