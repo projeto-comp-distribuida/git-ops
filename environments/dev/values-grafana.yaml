@@ -26,15 +26,21 @@ provisioning:
         isDefault: true
         editable: false
 
+env:
+  - name: GF_SERVER_ROOT_URL
+    value: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+  - name: GF_SERVER_SERVE_FROM_SUB_PATH
+    value: "true"
+
 ingress:
   enabled: true
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
   hosts:
-    - host: "grafana.dev.distrischool.com"
+    - host: ""
       paths:
-        - path: /
+        - path: /grafana
           pathType: Prefix
   tls: []
 
