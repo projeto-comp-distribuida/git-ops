@@ -94,20 +94,9 @@ env:
     value: "ws://notifications-management-service-dev.notifications-management-service-dev:80"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_5_PREDICATES_0
     value: "Path=/ws/notifications"
-  # CORS Configuration (using docker-compose format with ____ for nested properties)
-  # Use wildcard since allow-credentials is false (CORS spec allows wildcard when credentials=false)
-  # The ingress handles specific origin validation, gateway just needs to allow all origins
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_ORIGINS
-    value: "*"
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_METHODS
-    value: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_HEADERS
-    value: "*"
-  # Set to false because wildcard origins (*) cannot be used with credentials=true (CORS spec)
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOW_CREDENTIALS
-    value: "false"
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____MAX_AGE
-    value: "3600"
+  # CORS is handled entirely by the ingress controller
+  # Removing gateway-level CORS configuration to avoid conflicts
+  # The ingress handles both OPTIONS preflight and adds CORS headers to responses
   - name: JAVA_TOOL_OPTIONS
     value: "-XX:MaxRAMPercentage=65 -Xmx384m"
 
