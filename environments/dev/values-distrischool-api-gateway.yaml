@@ -116,12 +116,12 @@ ingress:
     # Enable CORS at ingress level to handle OPTIONS preflight requests
     # The gateway will handle CORS for actual requests, but ingress needs to allow OPTIONS through
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    # When allow-credentials is true, cannot use wildcard - must specify origins or set credentials to false
-    # Allow both IP and DNS name origins
-    nginx.ingress.kubernetes.io/cors-allow-origin: "http://130.131.18.12, http://distrischool.ddns.net"
+    # When allow-credentials is true, cannot use wildcard (*) - CORS spec restriction
+    # Set to false to allow wildcard origins, or specify exact origins
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS, PATCH"
     nginx.ingress.kubernetes.io/cors-allow-headers: "*"
-    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "false"
     nginx.ingress.kubernetes.io/cors-max-age: "3600"
   hosts:
     - host: ""
