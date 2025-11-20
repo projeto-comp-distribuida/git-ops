@@ -101,8 +101,9 @@ env:
     value: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_HEADERS
     value: "*"
+  # Set to false because wildcard origins (*) cannot be used with credentials=true (CORS spec)
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOW_CREDENTIALS
-    value: "true"
+    value: "false"
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____MAX_AGE
     value: "3600"
   - name: JAVA_TOOL_OPTIONS
