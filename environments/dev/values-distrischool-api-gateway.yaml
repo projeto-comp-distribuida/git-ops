@@ -116,8 +116,14 @@ ingress:
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    # CORS is handled by Spring Cloud Gateway - do not enable at ingress level to avoid conflicts
-    # The gateway's CORS configuration allows all origins, methods, and headers
+    # Enable CORS at ingress level to handle OPTIONS preflight requests
+    # The gateway will handle CORS for actual requests, but ingress needs to allow OPTIONS through
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "*"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-max-age: "3600"
   hosts:
     - host: ""
       paths:
