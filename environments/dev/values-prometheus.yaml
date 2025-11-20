@@ -23,7 +23,9 @@ config:
       metrics_path: /actuator/prometheus
       static_configs:
         - targets:
-            - auth.auth-dev.svc.cluster.local:8080
-            - gestao-de-alunos.gestao-de-alunos-dev.svc.cluster.local:8080
-            - gestao-de-professores.gestao-de-professores-dev.svc.cluster.local:8080
+            - auth-dev.auth-dev.svc.cluster.local:80
+            - gestao-de-alunos-dev.gestao-de-alunos-dev.svc.cluster.local:80
+            - gestao-de-professores-dev.gestao-de-professores-dev.svc.cluster.local:80
+            - gestao-de-notas-dev.gestao-de-notas-dev.svc.cluster.local:80
+            - gestao-de-turmas-e-horarios-dev.gestao-de-turmas-e-horarios-dev.svc.cluster.local:80
 
