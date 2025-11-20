@@ -46,7 +46,7 @@ ingress:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
   hosts:
-    - host: "frontend.dev.distrischool.com"
+    - host: ""
       paths:
         - path: /
           pathType: Prefix
