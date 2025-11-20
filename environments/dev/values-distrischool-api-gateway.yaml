@@ -4,7 +4,8 @@
 image:
   repository: distrischooldevacr.azurecr.io/api-gateway
   tag: "latest"
-
+  pullPolicy: Always
+  
 imagePullSecrets:
   - name: acr-secret
 
