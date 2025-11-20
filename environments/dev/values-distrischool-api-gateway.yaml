@@ -116,6 +116,13 @@ ingress:
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # Return 200 for /healthz to allow Azure Load Balancer health probes
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location = /healthz {
+        access_log off;
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+      }
   hosts:
     - host: ""
       paths:
