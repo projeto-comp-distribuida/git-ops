@@ -29,4 +29,32 @@ config:
             - gestao-de-notas-dev.gestao-de-notas-dev.svc.cluster.local:80
             - gestao-de-turmas-e-horarios-dev.gestao-de-turmas-e-horarios-dev.svc.cluster.local:80
             - notifications-management-service-dev.notifications-management-service-dev.svc.cluster.local:80
+      metric_relabel_configs:
+        # Extract service name from instance and add as 'service' label
+        # Instance format: service-name-dev.namespace.svc.cluster.local:80
+        - source_labels: [instance]
+          regex: '(.+)-dev\.[^.]+\.svc\.cluster\.local.*'
+          target_label: service
+          replacement: '${1}'
+        # Clean up service names for better readability
+        - source_labels: [service]
+          regex: 'gestao-de-alunos'
+          target_label: service
+          replacement: 'gestao-alunos'
+        - source_labels: [service]
+          regex: 'gestao-de-professores'
+          target_label: service
+          replacement: 'gestao-professores'
+        - source_labels: [service]
+          regex: 'gestao-de-notas'
+          target_label: service
+          replacement: 'gestao-notas'
+        - source_labels: [service]
+          regex: 'gestao-de-turmas-e-horarios'
+          target_label: service
+          replacement: 'gestao-turmas-horarios'
+        - source_labels: [service]
+          regex: 'notifications-management-service'
+          target_label: service
+          replacement: 'notifications'
 
