@@ -125,6 +125,12 @@ ingress:
     nginx.ingress.kubernetes.io/cors-allow-headers: "*"
     nginx.ingress.kubernetes.io/cors-allow-credentials: "false"
     nginx.ingress.kubernetes.io/cors-max-age: "3600"
+    # Rewrite Origin header to match Host header to avoid Spring Cloud Gateway CORS validation issues
+    # When browser resolves DNS to IP, it sends IP in Origin but DNS in Host, causing mismatch
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($http_origin ~* "^http://130\.131\.18\.12") {
+        set $http_origin "http://distrischool.ddns.net";
+      }
   hosts:
     - host: ""
       paths:
