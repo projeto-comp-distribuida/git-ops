@@ -1,0 +1,29 @@
+# Environment-specific values for Grafana in dev
+
+fullnameOverride: "grafana"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+admin:
+  username: admin
+  password: admin
+
+provisioning:
+  datasources:
+    enabled: true
+    fileName: datasource-prometheus.yaml
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus.infrastructure-dev.svc.cluster.local:9090
+        isDefault: true
+        editable: false
+
+

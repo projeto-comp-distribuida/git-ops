@@ -1,0 +1,71 @@
+image:
+  repository: distrischooldevacr.azurecr.io/distrischool-front
+  tag: "latest"
+
+imagePullSecrets:
+  - name: acr-secret
+
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+env:
+  - name: NODE_ENV
+    value: "production"
+  - name: NEXT_TELEMETRY_DISABLED
+    value: "1"
+  - name: PORT
+    value: "3000"
+  - name: NEXT_PUBLIC_API_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
+  - name: NEXT_PUBLIC_AUTH_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/auth"
+  - name: NEXT_PUBLIC_STUDENT_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/students"
+  - name: NEXT_PUBLIC_TEACHER_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/teachers"
+
+secrets:
+  enabled: false
+  secretName: "distrischool-front-dev-secrets"
+
+sealedSecrets:
+  enabled: false
+
+ingress:
+  enabled: false
+  className: ""
+  hosts: []
+
+probe:
+  startup:
+    enabled: true
+    useTcpSocket: true
+    path: /
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
+  liveness:
+    enabled: true
+    useTcpSocket: true
+    path: /
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readiness:
+    enabled: true
+    useTcpSocket: true
+    path: /
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+

@@ -1,0 +1,69 @@
+replicaCount: 1
+
+image:
+  repository: grafana/grafana
+  pullPolicy: IfNotPresent
+  tag: "10.4.3"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 3000
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+persistence:
+  enabled: false
+  accessModes:
+    - ReadWriteOnce
+  size: 5Gi
+  storageClassName: ""
+
+admin:
+  existingSecret: ""
+  username: admin
+  password: admin
+  userKey: admin-user
+  passwordKey: admin-password
+
+env: []
+
+provisioning:
+  datasources:
+    enabled: true
+    fileName: datasource-prometheus.yaml
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus:9090
+        editable: false
+        isDefault: true
+        jsonData: {}
+

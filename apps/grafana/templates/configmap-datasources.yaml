@@ -1,0 +1,17 @@
+{{- with .Values.provisioning.datasources }}
+{{- if .enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana.fullname" $ }}-datasources
+  labels:
+    {{- include "grafana.labels" $ | nindent 4 }}
+data:
+  {{ .fileName }}: |
+    apiVersion: 1
+    datasources:
+      {{- toYaml .datasources | nindent 6 }}
+{{- end }}
+{{- end }}
+
+

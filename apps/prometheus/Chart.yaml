@@ -1,0 +1,8 @@
+apiVersion: v2
+name: prometheus
+description: Prometheus monitoring stack for DistriSchool
+type: application
+version: 0.1.0
+appVersion: "2.53.0"
+
+

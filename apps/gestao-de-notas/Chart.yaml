@@ -1,0 +1,28 @@
+apiVersion: v2
+name: gestao-de-notas
+description: Grade management service Helm chart
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

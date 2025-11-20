@@ -1,0 +1,94 @@
+image:
+  repository: distrischooldevacr.azurecr.io/microservice-schedule-management-service
+  tag: "latest"
+
+imagePullSecrets:
+  - name: acr-secret
+
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 600m
+  requests:
+    cpu: 200m
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: "kubernetes"
+  - name: SERVER_PORT
+    value: "8080"
+  - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+    value: "org.postgresql.Driver"
+  - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+    value: "validate"
+  - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+    value: "org.hibernate.dialect.PostgreSQLDialect"
+  - name: SPRING_REDIS_HOST
+    value: "redis.infrastructure-dev"
+  - name: SPRING_REDIS_PORT
+    value: "6379"
+  - name: SPRING_REDIS_PASSWORD
+    value: ""
+  - name: KAFKA_BOOTSTRAP_SERVERS
+    value: "kafka.infrastructure-dev:29092"
+  - name: SPRING_KAFKA_PRODUCER_COMPRESSION_TYPE
+    value: "none"
+  - name: SPRING_FLYWAY_ENABLED
+    value: "true"
+  - name: SPRING_FLYWAY_LOCATIONS
+    value: "classpath:db/migration"
+  - name: SPRING_FLYWAY_BASELINE_ON_MIGRATE
+    value: "true"
+  - name: SPRING_FLYWAY_REPAIR_ON_MIGRATE
+    value: "true"
+  - name: SPRING_FLYWAY_OUT_OF_ORDER
+    value: "true"
+  - name: SECURITY_DISABLE
+    value: "false"
+  - name: AUTH_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/auth"
+  - name: STUDENT_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/students"
+  - name: TEACHER_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/teachers"
+
+secrets:
+  enabled: false
+  secretName: "gestao-de-turmas-e-horarios-dev-secrets"
+  # Use ./scripts/create-secrets.sh gestao-de-turmas-e-horarios gestao-de-turmas-e-horarios-dev
+
+sealedSecrets:
+  enabled: false
+
+ingress:
+  enabled: false
+  className: ""
+  hosts: []
+
+probe:
+  startup:
+    enabled: true
+    useTcpSocket: true
+    path: /actuator/health
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 120
+  liveness:
+    enabled: true
+    useTcpSocket: true
+    path: /actuator/health/liveness
+    initialDelaySeconds: 120
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readiness:
+    enabled: true
+    useTcpSocket: true
+    path: /actuator/health/readiness
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+

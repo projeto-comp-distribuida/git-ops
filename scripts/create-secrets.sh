@@ -99,12 +99,48 @@ create_or_update_secret() {
 
     echo "🔐 Creating/Updating secret: $secret_name in namespace: $ns_name"
 
+    # Determine service-specific database URL
+    # Check for service-specific variable first (e.g., SPRING_DATASOURCE_URL_GESTAO_DE_PROFESSORES)
+    local svc_upper=$(echo "$svc_name" | tr '[:lower:]' '[:upper:]' | tr '-' '_')
+    local db_url_var="SPRING_DATASOURCE_URL_${svc_upper}"
+    local db_url="${!db_url_var:-}"
+
+    # If service-specific URL not found, try to derive from base URL
+    if [ -z "$db_url" ] && [ -n "$SPRING_DATASOURCE_URL" ]; then
+        # Map service names to database names
+        case "$svc_name" in
+            auth)
+                db_url=$(echo "$SPRING_DATASOURCE_URL" | sed 's|/[^/]*$|/distrischool_auth|')
+                ;;
+            gestao-de-alunos)
+                db_url=$(echo "$SPRING_DATASOURCE_URL" | sed 's|/[^/]*$|/distrischool_students|')
+                ;;
+            gestao-de-professores)
+                db_url=$(echo "$SPRING_DATASOURCE_URL" | sed 's|/[^/]*$|/distrischool_teachers|')
+                ;;
+            *)
+                # Default: use as-is or try to derive database name from service name
+                db_url="$SPRING_DATASOURCE_URL"
+                echo "⚠️  Warning: No specific database mapping for service '$svc_name', using base URL"
+                ;;
+        esac
+    fi
+
+    # Fallback to base URL if still empty
+    if [ -z "$db_url" ]; then
+        db_url="$SPRING_DATASOURCE_URL"
+        echo "⚠️  Warning: Using base SPRING_DATASOURCE_URL for service '$svc_name'"
+    fi
+
+    echo "   Database URL: ${db_url}"
+    echo "   Using database: $(echo "$db_url" | sed 's|.*/\([^/]*\)$|\1|')"
+
     kubectl create secret generic "$secret_name" \
         --from-literal=auth0-domain="$AUTH0_DOMAIN" \
         --from-literal=auth0-client-id="$AUTH0_CLIENT_ID" \
         --from-literal=auth0-client-secret="$AUTH0_CLIENT_SECRET" \
         --from-literal=auth0-audience="$AUTH0_AUDIENCE" \
-        --from-literal=spring-datasource-url="$SPRING_DATASOURCE_URL" \
+        --from-literal=spring-datasource-url="$db_url" \
         --from-literal=spring-datasource-username="$SPRING_DATASOURCE_USERNAME" \
         --from-literal=spring-datasource-password="$SPRING_DATASOURCE_PASSWORD" \
         -n "$ns_name" \

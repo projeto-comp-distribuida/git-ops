@@ -10,6 +10,8 @@ gitops-repo/
 │   ├── auth/
 │   ├── gestao-de-alunos/
 │   ├── gestao-de-professores/
+│   ├── grafana/
+│   ├── prometheus/
 │   ├── distrischool-api-gateway/
 │   └── argocd/               # ArgoCD Application manifests
 ├── base/                      # Shared configurations and templates
@@ -24,6 +26,8 @@ gitops-repo/
 - **auth**: Authentication service
 - **gestao-de-alunos**: Student management service
 - **gestao-de-professores**: Teacher management service
+- **prometheus**: Central metrics collection for Spring Boot services
+- **grafana**: Visualization and dashboarding for collected metrics
 - **distrischool-api-gateway**: API Gateway service (entry point for all services)
 
 ## Repository

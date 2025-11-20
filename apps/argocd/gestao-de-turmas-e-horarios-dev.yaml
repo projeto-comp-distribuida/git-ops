@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gestao-de-turmas-e-horarios-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/projeto-comp-distribuida/git-ops.git
+    targetRevision: HEAD
+    path: apps/gestao-de-turmas-e-horarios
+    helm:
+      valueFiles:
+        - values.yaml
+        - ../../environments/dev/values-gestao-de-turmas-e-horarios.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gestao-de-turmas-e-horarios-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+
