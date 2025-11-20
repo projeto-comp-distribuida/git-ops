@@ -1,5 +1,5 @@
 image:
-  repository: distrischooldevacr.azurecr.io/distrischool-front
+  repository: distrischooldevacr.azurecr.io/microservice-frontend
   tag: "latest"
 
 imagePullSecrets:
