@@ -96,11 +96,9 @@ env:
     value: "Path=/ws/notifications"
   # CORS Configuration (using docker-compose format with ____ for nested properties)
   # Allow both IP and DNS name origins since browser may send either
-  # Spring Cloud Gateway expects a list format, so we use indexed environment variables
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_ORIGINS[0]
-    value: "http://130.131.18.12"
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_ORIGINS[1]
-    value: "http://distrischool.ddns.net"
+  # Spring Cloud Gateway supports comma-separated origins
+  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_ORIGINS
+    value: "http://130.131.18.12,http://distrischool.ddns.net"
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_METHODS
     value: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_HEADERS
