@@ -36,7 +36,7 @@ ingress:
     # Empty host allows access from any domain/IP (internet accessible)
     - host: ""
       paths:
-        - path: /
+        - path: /kafka-ui
           pathType: Prefix
   tls: []
 
