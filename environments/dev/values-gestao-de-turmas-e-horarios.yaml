@@ -1,5 +1,5 @@
 image:
-  repository: distrischooldevacr.azurecr.io/microservice-schedule-management-service
+  repository: distrischooldevacr.azurecr.io/microservice-class-management-service
   tag: "latest"
 
 imagePullSecrets:

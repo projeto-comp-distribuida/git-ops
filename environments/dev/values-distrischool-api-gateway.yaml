@@ -42,10 +42,7 @@ env:
     value: "http://auth-dev.auth-dev:80"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0
     value: "Path=/api/v1/auth/**"
-  - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0
-    value: "RemoveRequestHeader=Origin"
-  - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_1
-    value: "RemoveRequestHeader=Referer"
+  # Removed Origin and Referer header removal - needed for CORS to work properly
   # Users Service Route (also routes to auth service)
   - name: SPRING_CLOUD_GATEWAY_ROUTES_1_ID
     value: "users-service"
@@ -97,29 +94,51 @@ env:
     value: "ws://notifications-management-service-dev.notifications-management-service-dev:80"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_5_PREDICATES_0
     value: "Path=/ws/notifications"
-  # CORS Configuration (using docker-compose format with ____ for nested properties)
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_ORIGINS
-    value: "*"
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_METHODS
+  # CORS Configuration - Spring Cloud Gateway CORS configuration
+  # Spring Cloud Gateway validates Origin against Host header, so we need to allow both explicitly
+  # Using comma-separated format to allow both IP and DNS origins
+  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS____ALLOWED_ORIGINS
+    value: "http://130.131.18.12,http://distrischool.ddns.net"
+  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS____ALLOWED_METHODS
     value: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_HEADERS
+  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS____ALLOWED_HEADERS
     value: "*"
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOW_CREDENTIALS
-    value: "true"
-  - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____MAX_AGE
+  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS____ALLOW_CREDENTIALS
+    value: "false"
+  - name: SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS____MAX_AGE
     value: "3600"
   - name: JAVA_TOOL_OPTIONS
     value: "-XX:MaxRAMPercentage=65 -Xmx384m"
+  # HTTP Client timeout configuration for Spring Cloud Gateway
+  # Increase timeout to prevent timeouts on slow backend responses
+  - name: SPRING_CLOUD_GATEWAY_HTTP_CLIENT_CONNECT_TIMEOUT
+    value: "45000"
+  - name: SPRING_CLOUD_GATEWAY_HTTP_CLIENT_RESPONSE_TIMEOUT
+    value: "60000"
 
 ingress:
   enabled: true
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # Enable CORS at ingress level to handle OPTIONS preflight requests
+    # The gateway will handle CORS for actual requests, but ingress needs to allow OPTIONS through
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    # When allow-credentials is false, can use wildcard (*) - CORS spec allows this
+    # Use wildcard to allow both IP and DNS name origins since browser may send either
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "*"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "false"
+    nginx.ingress.kubernetes.io/cors-max-age: "3600"
+    # Increase proxy timeouts to handle slow backend responses (e.g., Auth0 API calls)
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
   hosts:
     - host: ""
       paths:
-        - path: /
+        - path: /api
           pathType: Prefix
   tls: []
 

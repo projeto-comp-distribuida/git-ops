@@ -32,11 +32,14 @@ ingress:
     # Optional: Add CORS headers if needed
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    # Rewrite path to strip /kafka-ui prefix before forwarding to backend
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
   hosts:
     # Empty host allows access from any domain/IP (internet accessible)
     - host: ""
       paths:
-        - path: /
-          pathType: Prefix
+        - path: /kafka-ui(/|$)(.*)
+          pathType: ImplementationSpecific
   tls: []
 
