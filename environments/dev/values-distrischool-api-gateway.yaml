@@ -109,6 +109,12 @@ env:
     value: "3600"
   - name: JAVA_TOOL_OPTIONS
     value: "-XX:MaxRAMPercentage=65 -Xmx384m"
+  # HTTP Client timeout configuration for Spring Cloud Gateway
+  # Increase timeout to prevent timeouts on slow backend responses
+  - name: SPRING_CLOUD_GATEWAY_HTTP_CLIENT_CONNECT_TIMEOUT
+    value: "45000"
+  - name: SPRING_CLOUD_GATEWAY_HTTP_CLIENT_RESPONSE_TIMEOUT
+    value: "60000"
 
 ingress:
   enabled: true
