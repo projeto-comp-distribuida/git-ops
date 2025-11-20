@@ -95,10 +95,10 @@ env:
   - name: SPRING_CLOUD_GATEWAY_ROUTES_5_PREDICATES_0
     value: "Path=/ws/notifications"
   # CORS Configuration (using docker-compose format with ____ for nested properties)
-  # Allow both IP and DNS name origins since browser may send either
-  # Spring Cloud Gateway supports comma-separated origins
+  # Use wildcard since allow-credentials is false (CORS spec allows wildcard when credentials=false)
+  # The ingress handles specific origin validation, gateway just needs to allow all origins
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_ORIGINS
-    value: "http://130.131.18.12,http://distrischool.ddns.net"
+    value: "*"
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_METHODS
     value: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
   - name: SPRING_CLOUD_GATEWAY_GLOBAL_CORS_CORS_CONFIGURATIONS____ALLOWED_HEADERS
