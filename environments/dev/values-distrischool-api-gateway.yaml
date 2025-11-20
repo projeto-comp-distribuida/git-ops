@@ -42,10 +42,7 @@ env:
     value: "http://auth-dev.auth-dev:80"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0
     value: "Path=/api/v1/auth/**"
-  - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0
-    value: "RemoveRequestHeader=Origin"
-  - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_1
-    value: "RemoveRequestHeader=Referer"
+  # Removed Origin and Referer header removal - needed for CORS to work properly
   # Users Service Route (also routes to auth service)
   - name: SPRING_CLOUD_GATEWAY_ROUTES_1_ID
     value: "users-service"
