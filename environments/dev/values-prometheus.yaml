@@ -28,4 +28,5 @@ config:
             - gestao-de-professores-dev.gestao-de-professores-dev.svc.cluster.local:80
             - gestao-de-notas-dev.gestao-de-notas-dev.svc.cluster.local:80
             - gestao-de-turmas-e-horarios-dev.gestao-de-turmas-e-horarios-dev.svc.cluster.local:80
+            - notifications-management-service-dev.notifications-management-service-dev.svc.cluster.local:80
 
