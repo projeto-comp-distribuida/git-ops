@@ -94,6 +94,50 @@ env:
     value: "ws://notifications-management-service-dev.notifications-management-service-dev:80"
   - name: SPRING_CLOUD_GATEWAY_ROUTES_5_PREDICATES_0
     value: "Path=/ws/notifications"
+  # Schedule Management Service Route (Gestao de Turmas e Horarios) - Classes
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_6_ID
+    value: "schedule-service-classes"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_6_URI
+    value: "http://gestao-de-turmas-e-horarios-dev.gestao-de-turmas-e-horarios-dev:80"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_6_PREDICATES_0
+    value: "Path=/api/v1/classes/**"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_6_FILTERS_0
+    value: "RemoveRequestHeader=Origin"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_6_FILTERS_1
+    value: "RemoveRequestHeader=Referer"
+  # Schedule Management Service Route (Gestao de Turmas e Horarios) - Turmas
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_7_ID
+    value: "schedule-service-turmas"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_7_URI
+    value: "http://gestao-de-turmas-e-horarios-dev.gestao-de-turmas-e-horarios-dev:80"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_7_PREDICATES_0
+    value: "Path=/api/v1/turmas/**"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_7_FILTERS_0
+    value: "RemoveRequestHeader=Origin"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_7_FILTERS_1
+    value: "RemoveRequestHeader=Referer"
+  # Schedule Management Service Route (Gestao de Turmas e Horarios) - Schedules
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_8_ID
+    value: "schedule-service-schedules"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_8_URI
+    value: "http://gestao-de-turmas-e-horarios-dev.gestao-de-turmas-e-horarios-dev:80"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_8_PREDICATES_0
+    value: "Path=/api/v1/schedules/**"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_8_FILTERS_0
+    value: "RemoveRequestHeader=Origin"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_8_FILTERS_1
+    value: "RemoveRequestHeader=Referer"
+  # Schedule Management Service Route (Gestao de Turmas e Horarios) - Horarios
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_9_ID
+    value: "schedule-service-horarios"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_9_URI
+    value: "http://gestao-de-turmas-e-horarios-dev.gestao-de-turmas-e-horarios-dev:80"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_9_PREDICATES_0
+    value: "Path=/api/v1/horarios/**"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_9_FILTERS_0
+    value: "RemoveRequestHeader=Origin"
+  - name: SPRING_CLOUD_GATEWAY_ROUTES_9_FILTERS_1
+    value: "RemoveRequestHeader=Referer"
   # CORS Configuration - Spring Cloud Gateway CORS configuration
   # Spring Cloud Gateway validates Origin against Host header, so we need to allow both explicitly
   # Using comma-separated format to allow both IP and DNS origins
