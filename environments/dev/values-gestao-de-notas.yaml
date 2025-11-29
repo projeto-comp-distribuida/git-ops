@@ -24,6 +24,10 @@ env:
     value: "none"
   - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
     value: "org.hibernate.dialect.PostgreSQLDialect"
+  - name: SPRING_JPA_PROPERTIES_HIBERNATE_VALIDATOR_APPLY_TO_DDL
+    value: "false"
+  - name: SPRING_JPA_PROPERTIES_HIBERNATE_CHECK_NULLABILITY
+    value: "false"
   - name: SPRING_REDIS_HOST
     value: "redis.infrastructure-dev"
   - name: SPRING_REDIS_PORT
