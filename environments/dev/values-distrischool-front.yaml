@@ -25,14 +25,19 @@ env:
     value: "3000"
   # Use external DNS name so browser sends DNS name in Origin header (not IP)
   # This ensures Origin header matches Host header for Spring Cloud Gateway CORS validation
+  # Note: NEXT_PUBLIC_API_URL should NOT include /api - the frontend code adds paths like /api/v1/auth/**
   - name: NEXT_PUBLIC_API_URL
-    value: "http://distrischool.ddns.net/api"
+    value: "http://distrischool.ddns.net"
   - name: NEXT_PUBLIC_AUTH_SERVICE_URL
     value: "http://distrischool.ddns.net/api/v1/auth"
   - name: NEXT_PUBLIC_STUDENT_SERVICE_URL
     value: "http://distrischool.ddns.net/api/v1/students"
   - name: NEXT_PUBLIC_TEACHER_SERVICE_URL
-    value: "http://distrischool.ddns.net/api/v1/teachers"
+    value: "http://distrischool.ddns.net/api/teachers"
+  - name: NEXT_PUBLIC_TEACHER_MANAGEMENT_SERVICE_URL
+    value: "http://distrischool.ddns.net/api/v1/teacher-management"
+  - name: NEXT_PUBLIC_NOTIFICATION_SERVICE_URL
+    value: "http://distrischool.ddns.net/api/v1/notifications"
 
 secrets:
   enabled: false
