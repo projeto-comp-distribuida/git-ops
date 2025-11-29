@@ -28,6 +28,8 @@ env:
     value: "false"
   - name: SPRING_JPA_PROPERTIES_HIBERNATE_CHECK_NULLABILITY
     value: "false"
+  - name: SPRING_JPA_PROPERTIES_HIBERNATE_JAKARTA_VALIDATION_MODE
+    value: "none"
   - name: SPRING_REDIS_HOST
     value: "redis.infrastructure-dev"
   - name: SPRING_REDIS_PORT
