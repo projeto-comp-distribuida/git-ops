@@ -67,14 +67,20 @@ env:
     value: "Username-Password-Authentication"
   - name: ACR_REGISTRY
     value: "distrischooldevacr.azurecr.io"
+  - name: AUTH_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
+  - name: STUDENT_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
+  - name: TEACHER_SERVICE_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
   - name: NEXT_PUBLIC_API_URL
     value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
   - name: NEXT_PUBLIC_AUTH_SERVICE_URL
-    value: "http://auth-dev.auth-dev:80/api/auth"
+    value: "http://distrischool.ddns.net/api/v1/auth"
   - name: NEXT_PUBLIC_STUDENT_SERVICE_URL
-    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/students"
+    value: "http://distrischool.ddns.net/api/v1/students"
   - name: NEXT_PUBLIC_TEACHER_SERVICE_URL
-    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/teachers"
+    value: "http://distrischool.ddns.net/api/v1/teachers"
 
 secrets:
   enabled: false
