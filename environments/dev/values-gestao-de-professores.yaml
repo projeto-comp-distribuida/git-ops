@@ -69,6 +69,8 @@ env:
     value: "distrischooldevacr.azurecr.io"
   - name: AUTH_SERVICE_URL
     value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
+  - name: MICROSERVICE_AUTH_URL
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
   - name: STUDENT_SERVICE_URL
     value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
   - name: TEACHER_SERVICE_URL
