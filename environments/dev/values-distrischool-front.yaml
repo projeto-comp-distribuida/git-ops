@@ -1,6 +1,7 @@
 image:
   repository: distrischooldevacr.azurecr.io/microservice-frontend
   tag: "latest"
+  pullPolicy: Always
 
 imagePullSecrets:
   - name: acr-secret
