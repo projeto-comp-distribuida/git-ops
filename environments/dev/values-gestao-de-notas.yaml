@@ -21,7 +21,7 @@ env:
   - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
     value: "org.postgresql.Driver"
   - name: SPRING_JPA_HIBERNATE_DDL_AUTO
-    value: "validate"
+    value: "none"
   - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
     value: "org.hibernate.dialect.PostgreSQLDialect"
   - name: SPRING_REDIS_HOST
