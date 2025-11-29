@@ -47,11 +47,11 @@ env:
   - name: SECURITY_DISABLE
     value: "false"
   - name: AUTH_SERVICE_URL
-    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/auth"
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
   - name: STUDENT_SERVICE_URL
-    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/students"
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
   - name: TEACHER_SERVICE_URL
-    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80/api/teachers"
+    value: "http://distrischool-api-gateway-dev.api-gateway-dev:80"
 
 secrets:
   enabled: false
